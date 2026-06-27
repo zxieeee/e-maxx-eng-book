@@ -1,0 +1,417 @@
+\documentclass[11pt,a4paper,oneside]{book}
+
+\let\youreallyshouldnotuseover\over
+
+% Basic packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{upquote}
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\usepackage[english]{babel}
+
+% Essentially the pandoc standard highlighting
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\small}
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+
+\usepackage{graphicx,grffile}
+\usepackage{float}
+
+%%%
+
+% Hack around some unicode char usage
+\DeclareUnicodeCharacter{2264}{\leq}
+
+% Misc
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Clearpage after sections
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+% Hyperref setup, needs to be below titlesec and above chngcntr, because LaTeX
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{
+            colorlinks=true,
+            allcolors=black,
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+
+% Reset chapter numbering per part
+%\usepackage{chngcntr}
+%\counterwithin*{chapter}{part}
+
+% Set default figure placement to have figures in-place
+% Not nice to LaTeX, but makes thing similar to the HTML
+\makeatletter
+\def\fps@figure{H}
+%\def\fps@figure{htbp}
+\makeatother
+
+% Page geometry for print
+\makeatletter
+\if@twoside
+    \usepackage[a4paper,top=1in,bottom=1in,inner=1.25in,outer=1in]{geometry}
+\else
+    \usepackage[a4paper,top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\fi
+\makeatother
+
+% Figure centering
+\let\oldincludegraphics\includegraphics
+\def\includegraphics#1{\begin{center}\oldincludegraphics{#1}\end{center}}
+
+% Figure sizing
+\makeatletter
+\def\ScaleIfNeeded{%
+  \ifdim0.6\Gin@nat@width>0.8\linewidth
+    0.8\linewidth
+  \else
+    0.6\Gin@nat@width
+  \fi
+}
+\makeatother
+\setkeys{Gin}{width=\ScaleIfNeeded}
+
+% MathJax compatibility
+\def\lt{<}
+\def\gt{>}
+
+% Store part title and suppress page numbers
+\let\Oldpart\part
+\newcommand\parttitle{}
+\renewcommand\part[1]{\Oldpart{#1}\thispagestyle{empty}\renewcommand{\parttitle}{#1}}
+
+% Header setup
+\usepackage{fancyhdr}
+\usepackage{changepage}
+\strictpagecheck
+\pagestyle{fancy}
+\setlength{\headheight}{22pt}
+
+\makeatletter
+\if@twoside
+    % Main header
+    \fancyhf{}
+    \fancyhead[RE]{\footnotesize\textsc{\rightmark}}
+    \fancyhead[LO]{\footnotesize\textsc{\parttitle,~~Chapter \thechapter.\ \leftmark}}
+    \fancyhead[LE,RO]{\footnotesize\thepage}
+    % Plain header
+    \fancypagestyle{plain}{%
+    \fancyhf{}
+    \fancyhead[LE,RO]{\footnotesize\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}}
+\else
+    % Main header
+    \fancyhf{}
+    \fancyhead[L]{\footnotesize\textsc{\checkoddpage\ifoddpage{\rightmark}\else{\parttitle,~~Chapter \thechapter.\ \leftmark}\fi}}
+    \fancyhead[R]{\footnotesize\thepage}
+    % Plain header
+    \fancypagestyle{plain}{%
+    \fancyhf{}
+    \fancyhead[R]{\footnotesize\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}}
+\fi
+\makeatother
+
+\renewcommand\chaptermark[1]{\markboth{#1}{}} 
+\renewcommand\sectionmark[1]{\markright{\thesection.\ #1}}
+
+% Make empty pages empty
+\usepackage{emptypage}
+
+
+\title{\textsc{{\Huge Algorithms} \\ {\Large translations and community additions}}}
+\author{
+    Maxim ``e-maxx'' Ivanov (\href{http://e-maxx.ru/}{e-maxx.ru}) \\
+    Various contributors (\href{https://github.com/e-maxx-eng/e-maxx-eng}{e-maxx-eng})}
+\date{\today{} \\
+{\footnotesize(based on 7e4b0db)}}
+
+\begin{document}
+
+% Title page
+\pagenumbering{gobble}
+\pagestyle{empty}
+\maketitle
+%\vfill
+%Build date: \today \hfill Last commit: 7e4b0db
+\cleardoublepage
+
+% Table of contents
+\pagenumbering{roman}
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\cleardoublepage
+
+% Content has normal numbering and has headers
+\pagenumbering{arabic}
+\pagestyle{fancy}
+
+% CONTENT GOES HERE
+\part{Algebra}
+\chapter{Fundamentals}
+\input{e-maxx-eng/src/algebra/binary-exp.tex}
+\input{e-maxx-eng/src/algebra/euclid-algorithm.tex}
+\input{e-maxx-eng/src/algebra/extended-euclid-algorithm.tex}
+\input{e-maxx-eng/src/algebra/linear-diophantine-equation.tex}
+\input{e-maxx-eng/src/algebra/fibonacci-numbers.tex}
+\chapter{Prime numbers}
+\input{e-maxx-eng/src/algebra/sieve-of-eratosthenes.tex}
+\input{e-maxx-eng/src/algebra/prime-sieve-linear.tex}
+\input{e-maxx-eng/src/algebra/primality_tests.tex}
+\input{e-maxx-eng/src/algebra/factorization.tex}
+\chapter{Number-theoretic functions}
+\input{e-maxx-eng/src/algebra/phi-function.tex}
+\input{e-maxx-eng/src/algebra/divisors.tex}
+\chapter{Modular arithmetic}
+\input{e-maxx-eng/src/algebra/module-inverse.tex}
+\input{e-maxx-eng/src/algebra/linear_congruence_equation.tex}
+\input{e-maxx-eng/src/algebra/chinese-remainder-theorem.tex}
+\input{e-maxx-eng/src/algebra/garners-algorithm.tex}
+\input{e-maxx-eng/src/algebra/factorial-modulo.tex}
+\input{e-maxx-eng/src/algebra/discrete-log.tex}
+\input{e-maxx-eng/src/algebra/primitive-root.tex}
+\input{e-maxx-eng/src/algebra/discrete-root.tex}
+\input{e-maxx-eng/src/algebra/montgomery_multiplication.tex}
+\chapter{Number systems}
+\input{e-maxx-eng/src/algebra/balanced-ternary.tex}
+\input{e-maxx-eng/src/algebra/gray-code.tex}
+\chapter{Miscellaneous}
+\input{e-maxx-eng/src/algebra/bit-manipulation.tex}
+\input{e-maxx-eng/src/algebra/all-submasks.tex}
+\input{e-maxx-eng/src/algebra/big-integer.tex}
+\input{e-maxx-eng/src/algebra/fft.tex}
+\input{e-maxx-eng/src/algebra/polynomial.tex}
+\input{e-maxx-eng/src/algebra/continued-fractions.tex}
+\input{e-maxx-eng/src/algebra/factoring-exp.tex}
+\part{Data Structures}
+\chapter{Fundamentals}
+\input{e-maxx-eng/src/data_structures/stack_queue_modification.tex}
+\input{e-maxx-eng/src/data_structures/sparse-table.tex}
+\chapter{Trees}
+\input{e-maxx-eng/src/data_structures/disjoint_set_union.tex}
+\input{e-maxx-eng/src/data_structures/fenwick.tex}
+\input{e-maxx-eng/src/data_structures/sqrt_decomposition.tex}
+\input{e-maxx-eng/src/data_structures/segment_tree.tex}
+\input{e-maxx-eng/src/data_structures/treap.tex}
+\input{e-maxx-eng/src/data_structures/sqrt-tree.tex}
+\input{e-maxx-eng/src/data_structures/randomized_heap.tex}
+\chapter{Advanced}
+\input{e-maxx-eng/src/data_structures/deleting_in_log_n.tex}
+\part{Dynamic Programming}
+\input{e-maxx-eng/src/dynamic_programming/intro-to-dp.tex}
+\input{e-maxx-eng/src/dynamic_programming/knapsack.tex}
+\input{e-maxx-eng/src/dynamic_programming/longest_increasing_subsequence.tex}
+\chapter{DP optimizations}
+\input{e-maxx-eng/src/dynamic_programming/divide-and-conquer-dp.tex}
+\input{e-maxx-eng/src/dynamic_programming/knuth-optimization.tex}
+\chapter{Tasks}
+\input{e-maxx-eng/src/dynamic_programming/profile-dynamics.tex}
+\input{e-maxx-eng/src/dynamic_programming/zero_matrix.tex}
+\part{String Processing}
+\chapter{Fundamentals}
+\input{e-maxx-eng/src/string/string-hashing.tex}
+\input{e-maxx-eng/src/string/rabin-karp.tex}
+\input{e-maxx-eng/src/string/prefix-function.tex}
+\input{e-maxx-eng/src/string/z-function.tex}
+\input{e-maxx-eng/src/string/suffix-array.tex}
+\input{e-maxx-eng/src/string/aho_corasick.tex}
+\chapter{Advanced}
+\input{e-maxx-eng/src/string/suffix-tree-ukkonen.tex}
+\input{e-maxx-eng/src/string/suffix-automaton.tex}
+\input{e-maxx-eng/src/string/lyndon_factorization.tex}
+\chapter{Tasks}
+\input{e-maxx-eng/src/string/expression_parsing.tex}
+\input{e-maxx-eng/src/string/manacher.tex}
+\input{e-maxx-eng/src/string/main_lorentz.tex}
+\part{Linear Algebra}
+\chapter{Matrices}
+\input{e-maxx-eng/src/linear_algebra/linear-system-gauss.tex}
+\input{e-maxx-eng/src/linear_algebra/determinant-gauss.tex}
+\input{e-maxx-eng/src/linear_algebra/determinant-kraut.tex}
+\input{e-maxx-eng/src/linear_algebra/rank-matrix.tex}
+\part{Combinatorics}
+\chapter{Fundamentals}
+\input{e-maxx-eng/src/algebra/factorial-divisors.tex}
+\input{e-maxx-eng/src/combinatorics/binomial-coefficients.tex}
+\input{e-maxx-eng/src/combinatorics/catalan-numbers.tex}
+\chapter{Techniques}
+\input{e-maxx-eng/src/combinatorics/inclusion-exclusion.tex}
+\input{e-maxx-eng/src/combinatorics/burnside.tex}
+\input{e-maxx-eng/src/combinatorics/stars_and_bars.tex}
+\input{e-maxx-eng/src/combinatorics/generating_combinations.tex}
+\chapter{Tasks}
+\input{e-maxx-eng/src/combinatorics/bishops-on-chessboard.tex}
+\input{e-maxx-eng/src/combinatorics/bracket_sequences.tex}
+\input{e-maxx-eng/src/combinatorics/counting_labeled_graphs.tex}
+\part{Numerical Methods}
+\chapter{Search}
+\input{e-maxx-eng/src/num_methods/binary_search.tex}
+\input{e-maxx-eng/src/num_methods/ternary_search.tex}
+\input{e-maxx-eng/src/num_methods/roots_newton.tex}
+\input{e-maxx-eng/src/num_methods/simulated_annealing.tex}
+\chapter{Integration}
+\input{e-maxx-eng/src/num_methods/simpson-integration.tex}
+\part{Geometry}
+\chapter{Elementary operations}
+\input{e-maxx-eng/src/geometry/basic-geometry.tex}
+\input{e-maxx-eng/src/geometry/segment-to-line.tex}
+\input{e-maxx-eng/src/geometry/lines-intersection.tex}
+\input{e-maxx-eng/src/geometry/check-segments-intersection.tex}
+\input{e-maxx-eng/src/geometry/segments-intersection.tex}
+\input{e-maxx-eng/src/geometry/circle-line-intersection.tex}
+\input{e-maxx-eng/src/geometry/circle-circle-intersection.tex}
+\input{e-maxx-eng/src/geometry/tangents-to-two-circles.tex}
+\input{e-maxx-eng/src/geometry/length-of-segments-union.tex}
+\chapter{Polygons}
+\input{e-maxx-eng/src/geometry/oriented-triangle-area.tex}
+\input{e-maxx-eng/src/geometry/area-of-simple-polygon.tex}
+\input{e-maxx-eng/src/geometry/point-in-convex-polygon.tex}
+\input{e-maxx-eng/src/geometry/minkowski.tex}
+\input{e-maxx-eng/src/geometry/picks-theorem.tex}
+\input{e-maxx-eng/src/geometry/lattice-points.tex}
+\chapter{Convex hull}
+\input{e-maxx-eng/src/geometry/convex-hull.tex}
+\input{e-maxx-eng/src/geometry/convex_hull_trick.tex}
+\chapter{Sweep-line}
+\input{e-maxx-eng/src/geometry/intersecting_segments.tex}
+\chapter{Planar graphs}
+\input{e-maxx-eng/src/geometry/planar.tex}
+\input{e-maxx-eng/src/geometry/point-location.tex}
+\chapter{Miscellaneous}
+\input{e-maxx-eng/src/geometry/nearest_points.tex}
+\input{e-maxx-eng/src/geometry/delaunay.tex}
+\input{e-maxx-eng/src/geometry/vertical_decomposition.tex}
+\input{e-maxx-eng/src/geometry/halfplane-intersection.tex}
+\input{e-maxx-eng/src/geometry/manhattan-distance.tex}
+\input{e-maxx-eng/src/geometry/enclosing-circle.tex}
+\part{Graphs}
+\chapter{Graph traversal}
+\input{e-maxx-eng/src/graph/breadth-first-search.tex}
+\input{e-maxx-eng/src/graph/depth-first-search.tex}
+\chapter{Connected components, bridges, articulations points}
+\input{e-maxx-eng/src/graph/search-for-connected-components.tex}
+\input{e-maxx-eng/src/graph/bridge-searching.tex}
+\input{e-maxx-eng/src/graph/bridge-searching-online.tex}
+\input{e-maxx-eng/src/graph/cutpoints.tex}
+\input{e-maxx-eng/src/graph/strongly-connected-components.tex}
+\input{e-maxx-eng/src/graph/strong-orientation.tex}
+\chapter{Single-source shortest paths}
+\input{e-maxx-eng/src/graph/dijkstra.tex}
+\input{e-maxx-eng/src/graph/dijkstra_sparse.tex}
+\input{e-maxx-eng/src/graph/bellman_ford.tex}
+\input{e-maxx-eng/src/graph/01_bfs.tex}
+\input{e-maxx-eng/src/graph/desopo_pape.tex}
+\chapter{All-pairs shortest paths}
+\input{e-maxx-eng/src/graph/all-pair-shortest-path-floyd-warshall.tex}
+\input{e-maxx-eng/src/graph/fixed_length_paths.tex}
+\chapter{Spanning trees}
+\input{e-maxx-eng/src/graph/mst_prim.tex}
+\input{e-maxx-eng/src/graph/mst_kruskal.tex}
+\input{e-maxx-eng/src/graph/mst_kruskal_with_dsu.tex}
+\input{e-maxx-eng/src/graph/second_best_mst.tex}
+\input{e-maxx-eng/src/graph/kirchhoff-theorem.tex}
+\input{e-maxx-eng/src/graph/pruefer_code.tex}
+\chapter{Cycles}
+\input{e-maxx-eng/src/graph/finding-cycle.tex}
+\input{e-maxx-eng/src/graph/finding-negative-cycle-in-graph.tex}
+\input{e-maxx-eng/src/graph/euler_path.tex}
+\chapter{Lowest common ancestor}
+\input{e-maxx-eng/src/graph/lca.tex}
+\input{e-maxx-eng/src/graph/lca_binary_lifting.tex}
+\input{e-maxx-eng/src/graph/lca_farachcoltonbender.tex}
+\input{e-maxx-eng/src/graph/rmq_linear.tex}
+\input{e-maxx-eng/src/graph/lca_tarjan.tex}
+\chapter{Flows and related problems}
+\input{e-maxx-eng/src/graph/edmonds_karp.tex}
+\input{e-maxx-eng/src/graph/push-relabel.tex}
+\input{e-maxx-eng/src/graph/push-relabel-faster.tex}
+\input{e-maxx-eng/src/graph/dinic.tex}
+\input{e-maxx-eng/src/graph/mpm.tex}
+\input{e-maxx-eng/src/graph/flow_with_demands.tex}
+\input{e-maxx-eng/src/graph/min_cost_flow.tex}
+\input{e-maxx-eng/src/graph/Assignment-problem-min-flow.tex}
+\input{e-maxx-eng/src/graph/stoer_wagner_mincut.tex}
+\chapter{Matchings and related problems}
+\input{e-maxx-eng/src/graph/bipartite-check.tex}
+\input{e-maxx-eng/src/graph/kuhn_maximum_bipartite_matching.tex}
+\input{e-maxx-eng/src/graph/hungarian-algorithm.tex}
+\chapter{Miscellaneous}
+\input{e-maxx-eng/src/graph/topological-sort.tex}
+\input{e-maxx-eng/src/graph/edge_vertex_connectivity.tex}
+\input{e-maxx-eng/src/graph/tree_painting.tex}
+\input{e-maxx-eng/src/graph/2SAT.tex}
+\input{e-maxx-eng/src/graph/hld.tex}
+\input{e-maxx-eng/src/graph/centroid_decomposition.tex}
+\part{Miscellaneous}
+\chapter{Sequences}
+\input{e-maxx-eng/src/sequences/rmq.tex}
+\input{e-maxx-eng/src/others/maximum_average_segment.tex}
+\input{e-maxx-eng/src/sequences/k-th.tex}
+\input{e-maxx-eng/src/sequences/mex.tex}
+\chapter{Game Theory}
+\input{e-maxx-eng/src/game_theory/games_on_graphs.tex}
+\input{e-maxx-eng/src/game_theory/sprague-grundy-nim.tex}
+\chapter{Schedules}
+\input{e-maxx-eng/src/schedules/schedule_one_machine.tex}
+\input{e-maxx-eng/src/schedules/schedule_two_machines.tex}
+\input{e-maxx-eng/src/schedules/schedule-with-completion-duration.tex}
+\chapter{Miscellaneous}
+\input{e-maxx-eng/src/others/tortoise_and_hare.tex}
+\input{e-maxx-eng/src/others/josephus_problem.tex}
+\input{e-maxx-eng/src/others/15-puzzle.tex}
+\input{e-maxx-eng/src/others/stern_brocot_tree_farey_sequences.tex}
+
+\end{document}
