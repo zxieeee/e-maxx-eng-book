@@ -9,14 +9,14 @@ book: e-maxx.pdf misc/imgfetch.sh
 travis: LATEXMK_FLAGS += -interaction=nonstopmode -auxdir=aux
 travis: book
 
-e-maxx.pdf: e-maxx.tex
-	latexmk ${LATEXMK_FLAGS} $<
+print: book
 
-e-maxx.tex: $(TEXS) misc/assemble.sh misc/parse_navigation.py misc/template.tex
+p: print
+
 	bash misc/assemble.sh > $@
 
 %.tex: %.md misc/fixes.pl
-	perl misc/fixes.pl $< | pandoc -f markdown -o $@
+	perl misc/fixes.pl $< | pandoc -f markdown+header_attributes+raw_attribute+raw_html+tex_math_dollars -t latex -o $@
 
 clean:
 	@rm -f $(TEXS)

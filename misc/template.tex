@@ -7,6 +7,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{longtable}
+\usepackage{booktabs}
 \usepackage{upquote}
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
@@ -74,9 +78,8 @@
 \PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
 \hypersetup{
             colorlinks=true,
-            linkcolor=[rgb]{0.1,0.1,1},
-            citecolor=[rgb]{0.1,0.1,1},
-            urlcolor=[rgb]{0.1,0.1,1},
+            allcolors=black,
+            pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 
@@ -91,14 +94,12 @@
 %\def\fps@figure{htbp}
 \makeatother
 
-% Page geometry
+% Page geometry for print
 \makeatletter
 \if@twoside
-    % book layout, different margins for odd and even
-    \usepackage[a4paper,top=1.5in,bottom=1.5in,outer=1.8in,inner=1.2in]{geometry}
+    \usepackage[a4paper,top=1in,bottom=1in,inner=1.25in,outer=1in]{geometry}
 \else
-    % screen layout, symmetric margins
-    \usepackage[a4paper,top=1.5in,bottom=1.5in,left=1.5in,right=1.5in]{geometry}
+    \usepackage[a4paper,top=1in,bottom=1in,left=1in,right=1in]{geometry}
 \fi
 \makeatother
 
@@ -132,6 +133,7 @@
 \usepackage{changepage}
 \strictpagecheck
 \pagestyle{fancy}
+\setlength{\headheight}{22pt}
 
 \makeatletter
 \if@twoside

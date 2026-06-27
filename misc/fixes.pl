@@ -8,10 +8,41 @@ my $imgpath = $fname;
 $imgpath =~ s#/[^/]+$##;
 
 my @lines;
+my $in_admonition = 0;
 
 my $i = 0;
 while (<>) {
     $i=$i+1;
+
+    if (/^===\s+["'][^"']+["']\s*$/) {
+        $_ = "";
+        next;
+    }
+
+    if (/^(?:!!!|\?\?\?)\s+([A-Za-z]+)(?:\s+"([^"]+)")?/) {
+        my $kind = lc($1);
+        my $title = defined $2 ? $2 : ucfirst($kind);
+        $_ = "**$title.**\n";
+        $in_admonition = 1;
+    }
+
+    if ($in_admonition) {
+        if (/^\s*$/) {
+            $in_admonition = 0;
+        } else {
+            s/^ {4}//;
+        }
+    }
+
+    # strip MkDocs-specific data-toc-label attributes from headings
+    s/\s*data-toc-label="[^"]*"//g;
+    s/\s*data-toc-label='[^']*'//g;
+    s/\{\s*\}//g;
+
+    # clean simple HTML wrappers that are not useful in LaTeX output
+    s#<div[^>]*>##g;
+    s#</div>##g;
+    s#<br\s*/?>#\n\n#g;
 
     if ($_ !~ /^#+ .*\{#.*\}.*$/) {
         # Top level headers
@@ -85,8 +116,12 @@ while (<>) {
 
     # Pls don't use unicode symbols like this in math mode.
     s/−/-/g;
-
-    # Convert en-space
+# Normalize unicode whitespace and invisible characters
+s/\x{200A}/ /g;
+s/\x{2009}/ /g;
+s/\x{202F}/ /g;
+s/\x{00A0}/ /g;
+s/\x{200B}//g;
     s/&ensp;/\\enspace/g;
     
     push(@lines, $_);
@@ -95,8 +130,8 @@ while (<>) {
 $content = join('',@lines);
 
 # use unnumbered environments (special, match is allowed between lines)
-$content =~ s/\$\$[\S\s]*\\begin\{(align|eqnarray)\}/\\begin{\1*}/g;
-$content =~ s/\\end\{(align|eqnarray)\}[\S\s]*\$\$/\\end{\1*}/g;
+$content =~ s/\$\$\s*\\begin\{(align|eqnarray)\}/\\begin{\1*}/g;
+$content =~ s/\\end\{(align|eqnarray)\}\s*\$\$/\\end{\1*}/g;
 
 print $content;
 
