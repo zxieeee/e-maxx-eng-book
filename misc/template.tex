@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,oneside]{book}
+\documentclass[12pt,a4paper,twoside]{book}
 
 \let\youreallyshouldnotuseover\over
 
@@ -17,7 +17,7 @@
 \usepackage[english]{babel}
 
 % Essentially the pandoc standard highlighting
-\usepackage{color}
+\usepackage[x11names,dvipsnames]{xcolor}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
 \newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
@@ -75,10 +75,12 @@
 % Hyperref setup, needs to be below titlesec and above chngcntr, because LaTeX
 \PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
 \usepackage[unicode=true]{hyperref}
-\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
 \hypersetup{
             colorlinks=true,
-            allcolors=black,
+            linkcolor=black,
+            urlcolor=black,
+            citecolor=black,
+            filecolor=black,
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -189,7 +191,7 @@
 % Table of contents
 \pagenumbering{roman}
 {
-\hypersetup{linkcolor=black}
+\hypersetup{linkcolor=NavyBlue}
 \setcounter{tocdepth}{1}
 \tableofcontents
 }

@@ -32,18 +32,33 @@ then
 Page layout
 -----------
 
-Two layouts are available for easy use: `oneside` and `twoside`. Switch between the two by editing the first line of `template.tex`.
+Two layouts are available for easy use: `oneside` and `twoside`.
+
+* `oneside` — normal PDF output, good for screen reading.
+* `twoside` — print-friendly PDF output, good for book-style double-sided printing.
+
+### Build commands
+
+Use the script directly to generate the assembled LaTeX file:
+
+    bash misc/assemble.sh oneside > e-maxx-gen.tex
+    bash misc/assemble.sh twoside > e-maxx-gen.tex
+
+Then compile with:
+
+    pdflatex -interaction=nonstopmode -halt-on-error e-maxx-gen.tex
+
+Or use the provided Makefile targets:
+
+    make pdf         # normal single-sided PDF output (e-maxx.pdf)
+    make print       # two-sided print-friendly PDF output (e-maxx-twoside.pdf)
+
+If you want the default target, use:
+
+    make
 
 ### oneside
-The default and is a good fit for on-screen reading.
-
-* no extra blank pages
-* symmetric margins
-* headers have page numbering on the right side
+Normal output with symmetric margins and fewer blank pages.
 
 ### twoside
-A good fit for books.
-
-* blank pages are added to make parts and chapters start on even pages
-* margins are non-symmetric for a nicer experience with an open book (slimmer inner margins)
-* headers have page numbering on the outside
+Print-friendly output with two-sided layout, asymmetric inner/outer margins, and proper chapter/page placement for printing.
